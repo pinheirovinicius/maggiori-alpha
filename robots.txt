@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pinheirovinicius.github.io/maggiori-alpha/sitemap.xml
+Sitemap: https://www.maggiorialpha.com.br/sitemap.xml
