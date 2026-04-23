@@ -1,3 +1,40 @@
+
+
+/* === Global Background === */
+:root {
+  --bg-image: url("../images/bg-sp-ponte-estaiada-bw.png");
+  --bg-overlay: rgba(0,0,0,.62);
+  --bg-overlay-2: rgba(0,0,0,.35);
+}
+
+body {
+  background: #0b0c0f; /* fallback */
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: translateZ(0);
+  z-index: -2;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  /* dark overlay to keep readability / preserve premium contrast */
+  background:
+    radial-gradient(1200px 800px at 20% 10%, var(--bg-overlay-2), transparent 55%),
+    linear-gradient(180deg, var(--bg-overlay), rgba(0,0,0,.70));
+  z-index: -1;
+}
+
+
 /* Maggiori Alpha - Premium Executive Taxi
    Font: Montserrat
    Logo colors:
@@ -78,7 +115,7 @@ strong{ font-weight:700; }
   gap:10px;
 }
 .brand__logo{
-  height:42px;
+  height: clamp(48px, 4.2vw, 66px);
   width:auto;
   filter: drop-shadow(0 10px 30px rgba(0,0,0,.35));
 }
@@ -254,7 +291,7 @@ strong{ font-weight:700; }
   padding:18px 18px 12px;
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
-.card__logo{ height:44px; width:auto; }
+.card__logo{ height: clamp(48px, 4vw, 64px); width:auto; }
 .card__title{ margin:0; font-weight:700; letter-spacing:.2px; }
 .card__subtitle{ margin:4px 0 0; color: rgba(255,255,255,.70); font-size: 12.5px; }
 .card__body{ padding:14px 18px; }
@@ -505,7 +542,7 @@ input:focus, textarea:focus{
   gap:16px;
   align-items:center;
 }
-.footer__logo{ height:34px; width:auto; opacity:.95; }
+.footer__logo{ height: 44px; width:auto; opacity:.95; }
 .footer__text{ margin:10px 0 0; color: rgba(255,255,255,.65); font-size: 12.5px; }
 .footer__links{
   display:flex;
@@ -677,3 +714,119 @@ input:focus, textarea:focus{
   .toTop{ bottom: 92px; }
   .waFloat__text{ display:none; } /* keeps the UI clean on very small screens */
 }
+
+
+/* Keep layout layers above background */
+header, main, footer, .whatsapp-float, .back-to-top {
+  position: relative;
+  z-index: 0;
+}
+
+
+/* Optional: soften solid panels to blend with city background */
+.glass, .card, .panel, .feature-card {
+  backdrop-filter: blur(10px);
+}
+
+
+/* === Carousel (Gallery) === */
+.gallery-wrap {
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(10, 11, 14, .55);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 60px rgba(0,0,0,.35);
+}
+
+.carousel { position: relative; overflow: hidden; }
+.carousel-track {
+  display: flex;
+  transition: transform .55s cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+}
+.slide { flex: 0 0 100%; position: relative; }
+.slide img {
+  width: 100%;
+  height: clamp(240px, 42vw, 520px);
+  object-fit: cover;
+  display: block;
+  filter: grayscale(0%);
+}
+.slide .caption {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  color: rgba(255,255,255,.92);
+  background: rgba(0,0,0,.40);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.16);
+  font-size: 13px;
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  gap: 12px;
+  background: rgba(10, 11, 14, .72);
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.22);
+  border: 1px solid rgba(255,255,255,.10);
+  cursor: pointer;
+  transition: .2s ease;
+}
+.dot.active {
+  width: 22px;
+  background: var(--gold, #9D792A);
+  border-color: rgba(255,255,255,.12);
+}
+
+.iconbtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  box-shadow: 0 10px 22px rgba(0,0,0,.25);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: .2s ease;
+  color: rgba(255,255,255,.88);
+}
+.iconbtn:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.10);
+}
+.iconbtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 520px) {
+  .carousel-controls {
+    padding: 10px;
+  }
+  .slide .caption {
+    left: 10px; bottom: 10px;
+    font-size: 12px;
+  }
+}
+

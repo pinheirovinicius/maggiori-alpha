@@ -155,4 +155,79 @@
     setTimeout(tick, 650);
   }
 
+  // === Carousel (Gallery) ===
+  const initCarousel = () => {
+    const root = document.querySelector('[data-carousel]');
+    if (!root) return;
+
+    const track = root.querySelector('[data-track]');
+    const slides = Array.from(root.querySelectorAll('[data-slide]'));
+    const dotsWrap = root.querySelector('[data-dots]');
+    const prev = root.querySelector('[data-prev]');
+    const next = root.querySelector('[data-next]');
+
+    let index = 0;
+    let timer = null;
+
+    const clampIndex = (i) => {
+      const n = slides.length;
+      return (i % n + n) % n;
+    };
+
+    const update = () => {
+      if (!track) return;
+      track.style.transform = `translateX(${-index * 100}%)`;
+      if (dotsWrap) {
+        dotsWrap.querySelectorAll('.dot').forEach((d, i) => {
+          d.classList.toggle('active', i === index);
+          d.setAttribute('aria-current', i === index ? 'true' : 'false');
+        });
+      }
+    };
+
+    const goTo = (i, user = false) => {
+      index = clampIndex(i);
+      update();
+      if (user) restart();
+    };
+
+    const renderDots = () => {
+      if (!dotsWrap) return;
+      dotsWrap.innerHTML = '';
+      slides.forEach((_, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'dot';
+        b.setAttribute('aria-label', `Ir para a imagem ${i + 1}`);
+        b.addEventListener('click', () => goTo(i, true));
+        dotsWrap.appendChild(b);
+      });
+    };
+
+    const start = () => {
+      if (slides.length < 2) return;
+      timer = window.setInterval(() => goTo(index + 1), 4200);
+    };
+    const stop = () => {
+      if (timer) window.clearInterval(timer);
+      timer = null;
+    };
+    const restart = () => {
+      stop(); start();
+    };
+
+    if (prev) prev.addEventListener('click', () => goTo(index - 1, true));
+    if (next) next.addEventListener('click', () => goTo(index + 1, true));
+
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    root.addEventListener('touchstart', stop, { passive: true });
+    root.addEventListener('touchend', start, { passive: true });
+
+    renderDots();
+    goTo(0);
+    start();
+  };
+  initCarousel();
+
 })();
